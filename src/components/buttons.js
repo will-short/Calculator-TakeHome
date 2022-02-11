@@ -89,7 +89,7 @@ export default function Buttons({
       !calcString.endsWith(" ")
     ) {
       setCalcString(calcString + e.target.innerHTML);
-    } else if (!(e.target.innerHTML[0] === " ")) {
+    } else if (!(e.target.innerHTML[0] === " ") && calcString.length < 25) {
       eql = "";
       setCalcString(calcString + e.target.innerHTML);
     }
