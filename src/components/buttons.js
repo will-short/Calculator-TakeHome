@@ -1,3 +1,11 @@
+import {
+  handleRoman,
+  romanExpressionToInt,
+  intExpressionToRoman,
+  intToRoman,
+  romanToInt,
+} from "./utils";
+
 const numericButtons = [
   "IIVX",
   "CE",
@@ -44,54 +52,21 @@ export default function Buttons({
   setCalcString,
   eql,
 }) {
-  function handleRoman() {
-    const symbols = {
-      M: 1000,
-      CM: 900,
-      D: 500,
-      CD: 400,
-      C: 100,
-      XC: 90,
-      L: 50,
-      XL: 40,
-      X: 10,
-      IX: 9,
-      V: 5,
-      IV: 4,
-      I: 1,
-    };
-    let convert = calcString.split(/( . )/);
-    let converted = convert.map((s) => {
-      if (s.match(/( . )/)) return s;
-      let value = 0;
-      for (let i = 0; i < s.length; i++) {
-        const pair = s[i + 1] ? s[i] + s[i + 1] : "";
-        if (symbols[pair]) {
-          value += symbols[pair];
-          i++;
-        } else value += symbols[s[i]];
-      }
-      return value;
-    });
-    let intRes = Math.round(eval(converted.join("")));
-    let backToRoman = "";
-    for (const [symbol, value] of Object.entries(symbols)) {
-      if (value <= intRes) {
-        while (intRes - value >= 0) {
-          intRes -= value;
-          backToRoman += symbol;
-        }
-      }
-    }
-
-    eql = backToRoman;
-    return setCalcString(`${eql}`);
-  }
-
   function handleClick(e) {
     if (e.target.innerText.length === 4) {
-      eql = "";
-      setCalcString("");
+      if (eql) {
+        if (!roman) {
+          eql = intToRoman(eql);
+        } else {
+          eql = romanToInt(`${eql}`);
+        }
+      } else {
+        if (!roman) {
+          setCalcString(intExpressionToRoman(calcString));
+        } else {
+          setCalcString(romanExpressionToInt(`${calcString}`));
+        }
+      }
       return setRoman(!roman);
     }
     if (e.target.innerText === "CE") {
@@ -99,8 +74,10 @@ export default function Buttons({
       return setCalcString("");
     }
     if (e.target.innerText === "=") {
-      if (roman) return handleRoman();
-      else {
+      if (roman) {
+        eql = handleRoman(calcString);
+        return setCalcString(`${eql}`);
+      } else {
         eql = eval(calcString);
         return setCalcString(`${eql}`);
       }
@@ -117,6 +94,7 @@ export default function Buttons({
       setCalcString(calcString + e.target.innerHTML);
     }
   }
+
   if (roman) {
     return (
       <>
@@ -139,6 +117,7 @@ export default function Buttons({
       </>
     );
   }
+
   return (
     <>
       {numericButtons.map((val, i) => (
