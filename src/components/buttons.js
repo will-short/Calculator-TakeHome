@@ -75,10 +75,10 @@ export default function Buttons({
     }
     if (e.target.innerText === "=") {
       if (roman) {
-        eql = handleRoman(calcString);
+        eql = handleRoman(calcString.replace(/^(0+)/, ""));
         return setCalcString(`${eql}`);
       } else {
-        eql = eval(calcString);
+        eql = eval(calcString.replace(/^(0+)/, ""));
         return setCalcString(`${eql}`);
       }
     }
