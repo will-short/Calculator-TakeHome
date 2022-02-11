@@ -46,19 +46,19 @@ export default function Buttons({
 }) {
   function handleRoman() {
     const symbols = {
-      I: 1,
-      IV: 4,
-      IX: 9,
-      V: 5,
-      X: 10,
-      XL: 40,
-      XC: 90,
-      L: 50,
-      C: 100,
-      CD: 400,
+      M: 1000,
       CM: 900,
       D: 500,
-      M: 1000,
+      CD: 400,
+      C: 100,
+      XC: 90,
+      L: 50,
+      XL: 40,
+      X: 10,
+      IX: 9,
+      V: 5,
+      IV: 4,
+      I: 1,
     };
     let convert = calcString.split(/( . )/);
     let converted = convert.map((s) => {
@@ -73,7 +73,18 @@ export default function Buttons({
       }
       return value;
     });
-    eql = Math.round(eval(converted.join("")));
+    let intRes = Math.round(eval(converted.join("")));
+    let backToRoman = "";
+    for (const [symbol, value] of Object.entries(symbols)) {
+      if (value <= intRes) {
+        while (intRes - value >= 0) {
+          intRes -= value;
+          backToRoman += symbol;
+        }
+      }
+    }
+
+    eql = backToRoman;
     return setCalcString(`${eql}`);
   }
 
