@@ -96,7 +96,7 @@ main {
   width: 100%;
   background-color: white;
   border-radius: 1rem;
-  border: 1px solid rgb(230, 230, 230);
+  border: 1px solid #dadada;
   font-family: display;
   padding: 10px 14px 0 10px;
 }
@@ -125,4 +125,8 @@ button.function {
 }
 button.blue {
   background-color: #4285f4;
+}
+button:nth-child(1),
+button:nth-child(2) {
+  grid-column: span 2;
 }
